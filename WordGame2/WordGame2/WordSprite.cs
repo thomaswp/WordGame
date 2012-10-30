@@ -24,6 +24,7 @@ namespace TextTest
 
         public Vector2 Position;
         public Vector2 Velocity;
+        private Vector2 relativeVelocity;
 
         private Color startColor;
 
@@ -69,7 +70,7 @@ namespace TextTest
 
         public void Update(GameTime gameTime, Vector2 mapVelocity)
         {
-            Vector2 relativeVelocity = Velocity - mapVelocity;
+            relativeVelocity = Velocity - mapVelocity;
             Position += relativeVelocity * gameTime.ElapsedGameTime.Milliseconds / 1000f;
             if (Position.X > Game1.WIDTH + size.X && relativeVelocity.X > 0) Position.X = -size.X;
             if (Position.Y > Game1.HEIGHT + size.Y && relativeVelocity.Y > 0) Position.Y = -size.Y;
@@ -81,6 +82,12 @@ namespace TextTest
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            Color c2 = color;
+            for (int i = 1; i < 4; i++)
+            {
+                c2.A = (byte)(c2.A * 0.6);
+                spriteBatch.DrawString(font, word, Position - relativeVelocity * 0.05f * i, c2, 0, size / 2, layerDepth + 1, SpriteEffects.None, layerDepth);
+            }
             spriteBatch.DrawString(font, word, Position, color, 0, size / 2, layerDepth + 1, SpriteEffects.None, layerDepth);
             //spriteBatch.DrawString(font, word, Position - size / 2, color);
         }
